@@ -145,7 +145,7 @@ public class CampusInfoActivity extends AppCompatActivity {
     }
 
     public void sendRequest() {
-        String url = "http://somcoco.co.kr/somcoco/campus_info.jsp";
+        String url = "https://somcoco.co.kr/application/campus_info.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -262,7 +262,7 @@ public class CampusInfoActivity extends AppCompatActivity {
     }
 
     public void sendRequestCarousel() {
-        String url = "http://somcoco.co.kr/somcoco/campus_carousel.jsp";
+        String url = "https://somcoco.co.kr/application/campus_carousel.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,

@@ -1,6 +1,7 @@
 package com.example.somcoco.etc;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -46,6 +47,7 @@ public class Cs extends AppCompatActivity {
         reset = (Button)findViewById(R.id.reset);
         submit = (Button)findViewById(R.id.submit);
 
+        reset.setBackgroundColor(Color.LTGRAY);
 
         dial = new Dialog(Cs.this);
         dial.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -168,7 +170,7 @@ public class Cs extends AppCompatActivity {
     }
 
     public void sendRequest() {
-        String url = "http:somcoco.co.kr/somcoco/cs.jsp";
+        String url = "http:somcoco.co.kr/application/cs.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,

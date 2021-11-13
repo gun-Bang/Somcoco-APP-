@@ -235,7 +235,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
     }
 
     public void sendRequestBuild(String nfc, String cps){
-        String url = "http://somcoco.co.kr/somcoco/building_info.jsp";
+        String url = "https://somcoco.co.kr/application/building_info.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -298,7 +298,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
     }
 
     public void sendRequestFacList(String nfc, String cps){
-        String url = "http://somcoco.co.kr/somcoco/facility_list.jsp";
+        String url = "https://somcoco.co.kr/application/facility_list.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -342,7 +342,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
     }
 
     public void sendRequestFacility(String nfc, String cps, String num){
-        String url = "http://somcoco.co.kr/somcoco/facility_info.jsp";
+        String url = "https://somcoco.co.kr/application/facility_info.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,

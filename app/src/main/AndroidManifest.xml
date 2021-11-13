@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/somcoco_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.Somcoco">
         <activity
             android:name=".SplashActivity"
             android:exported="true">

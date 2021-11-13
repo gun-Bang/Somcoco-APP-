@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import com.example.somcoco.R;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CampusListAdapter extends RecyclerView.Adapter<CampusListAdapter.ViewHolder> {
+public class CampusListAdapter extends RecyclerView.Adapter<CampusListAdapter.ViewHolder>  {
 
     Context context;
     ArrayList<CampusListItem> items = new ArrayList<CampusListItem>();

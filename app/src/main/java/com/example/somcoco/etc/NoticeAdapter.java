@@ -144,5 +144,4 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ItemViewHo
             va.start();
         }
     }
-
 }

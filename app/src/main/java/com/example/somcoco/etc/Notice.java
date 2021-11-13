@@ -56,7 +56,7 @@ public class Notice extends AppCompatActivity {
     }
 
     public void sendRequest() {
-        String url = "http:somcoco.co.kr/somcoco/notice.jsp";
+        String url = "https://somcoco.co.kr/application/notice.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,

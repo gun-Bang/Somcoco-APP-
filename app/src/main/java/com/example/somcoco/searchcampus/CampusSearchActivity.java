@@ -1,7 +1,10 @@
 package com.example.somcoco.searchcampus;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -9,7 +12,10 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,11 +38,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.somcoco.AppHelper;
 import com.example.somcoco.R;
+import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
@@ -48,9 +56,12 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
     ImageView mic;
     EditText searchKeyword;
     TextView searchNone;
-    ImageView imageButton;
+    ImageView filterBtn;
     CampusListAdapter adapter;
     String keyword;
+    Dialog dialog;
+    String filter = "";
+    ArrayList<String> item = new ArrayList<String>();
     final int PERMISSION = 1;
 
     @Override
@@ -69,8 +80,11 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
         }
 
         Intent inIntent = getIntent();
-        keyword = inIntent.getStringExtra("keyword");
-        sendRequest(keyword);
+        //keyword = inIntent.getStringExtra("keyword");
+
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.filter_dialog);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.campus_list_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -80,7 +94,7 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CampusListAdapter(getApplicationContext());
 
-        imageButton = (ImageView) findViewById(R.id.search_search_btn);
+        filterBtn = (ImageView) findViewById(R.id.search_filter);
         searchKeyword = (EditText) findViewById(R.id.search_campus_keyword);
         mic = (ImageView) findViewById(R.id.search_mic_btn);
         searchKeyword.setText(keyword);
@@ -100,7 +114,7 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
                             Toast.makeText(getApplicationContext(),"검색어를 입력해주세요.",Toast.LENGTH_SHORT).show();
                         } else {
                             adapter.items.clear();
-                            sendRequest(keyword);
+                            sendRequest(keyword, filter);
                         }
                     break;
 
@@ -111,17 +125,10 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
             }
         });
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                keyword = searchKeyword.getText().toString();
-
-                if(keyword.equals("")) {
-                    Toast.makeText(getApplicationContext(),"검색어를 입력해주세요.",Toast.LENGTH_SHORT).show();
-                } else {
-                    adapter.items.clear();
-                    sendRequest(keyword);
-                }
+            public void onClick(View v) {
+                showDialog();
             }
         });
 
@@ -145,8 +152,8 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
             }
         });
     }
-    public void sendRequest(String reqStr) {
-        String url = "http://somcoco.co.kr/somcoco/campus_search.jsp";
+    public void sendRequest(String reqStr, String filter) {
+        String url = "https://somcoco.co.kr/application/campus_search.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -167,6 +174,7 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("msg", reqStr);
+                params.put("filter", filter);
 
                 return params;
             }
@@ -281,9 +289,273 @@ public class CampusSearchActivity extends AppCompatActivity implements SwipeRefr
             Toast.makeText(getApplicationContext(),"검색어를 입력해주세요.",Toast.LENGTH_SHORT).show();
         } else {
             adapter.items.clear();
-            sendRequest(keyword);
+            sendRequest(keyword, filter);
         }
 
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void showDialog() {
+        dialog.show();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        Button btn = (Button) dialog.findViewById(R.id.submit);
+
+        Chip chip1 = (Chip) dialog.findViewById(R.id.chip_seoul);
+        Chip chip2 = (Chip) dialog.findViewById(R.id.chip_gyeonggi);
+        Chip chip3 = (Chip) dialog.findViewById(R.id.chip_incheon);
+        Chip chip4 = (Chip) dialog.findViewById(R.id.chip_daejeon);
+        Chip chip5 = (Chip) dialog.findViewById(R.id.chip_sejong);
+        Chip chip6 = (Chip) dialog.findViewById(R.id.chip_chungnam);
+        Chip chip7 = (Chip) dialog.findViewById(R.id.chip_chungbuk);
+        Chip chip8 = (Chip) dialog.findViewById(R.id.chip_gwangju);
+        Chip chip9 = (Chip) dialog.findViewById(R.id.chip_jeonnam);
+        Chip chip10 = (Chip) dialog.findViewById(R.id.chip_jeonbuk);
+        Chip chip11 = (Chip) dialog.findViewById(R.id.chip_busan);
+        Chip chip12 = (Chip) dialog.findViewById(R.id.chip_gyeongnam);
+        Chip chip13 = (Chip) dialog.findViewById(R.id.chip_ulsan);
+        Chip chip14 = (Chip) dialog.findViewById(R.id.chip_daegu);
+        Chip chip15 = (Chip) dialog.findViewById(R.id.chip_gyeongbuk);
+        Chip chip16 = (Chip) dialog.findViewById(R.id.chip_gangwon);
+        Chip chip17 = (Chip) dialog.findViewById(R.id.chip_jeju);
+
+        chip1.setText("서울특별시");
+        chip2.setText("경기도");
+        chip3.setText("인천광역시");
+        chip4.setText("대전광역시");
+        chip5.setText("세종특별자치시");
+        chip6.setText("충청남도");
+        chip7.setText("충청북도");
+        chip8.setText("광주광역시");
+        chip9.setText("전라남도");
+        chip10.setText("전라북도");
+        chip11.setText("부산광역시");
+        chip12.setText("경상남도");
+        chip13.setText("울산광역시");
+        chip14.setText("대구광역시");
+        chip15.setText("경상북도");
+        chip16.setText("강원도");
+        chip17.setText("제주특별자치도");
+
+        chip1.setCheckable(true);
+        chip2.setCheckable(true);
+        chip3.setCheckable(true);
+        chip4.setCheckable(true);
+        chip5.setCheckable(true);
+        chip6.setCheckable(true);
+        chip7.setCheckable(true);
+        chip8.setCheckable(true);
+        chip9.setCheckable(true);
+        chip10.setCheckable(true);
+        chip11.setCheckable(true);
+        chip12.setCheckable(true);
+        chip13.setCheckable(true);
+        chip14.setCheckable(true);
+        chip15.setCheckable(true);
+        chip16.setCheckable(true);
+        chip17.setCheckable(true);
+
+
+        chip1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip8.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip9.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip10.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip11.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip13.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip14.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip15.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip16.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        chip17.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    item.add(buttonView.getText().toString());
+                } else {
+                    item.remove(String.valueOf(buttonView.getText().toString()));
+                }
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filter = String.join("|", item);
+
+                if (keyword != null) {
+                    adapter.items.clear();
+                    sendRequest(keyword, filter);
+                }
+                dialog.dismiss();
+            }
+        });
     }
 }

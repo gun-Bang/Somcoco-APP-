@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
         campusOnFragment = new CampusOnFragment();
         etcFragment = new EtcFragment();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

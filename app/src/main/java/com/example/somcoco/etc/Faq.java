@@ -54,7 +54,7 @@ public class Faq extends AppCompatActivity {
     }
 
     public void sendRequest() {
-        String url = "http:somcoco.co.kr/somcoco/faq.jsp";
+        String url = "https://somcoco.co.kr/application/faq.jsp";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
